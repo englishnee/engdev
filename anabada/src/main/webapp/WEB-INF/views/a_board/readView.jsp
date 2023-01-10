@@ -35,6 +35,11 @@
 					"&searchType=${scri.searchType}" + "&keyword=${scri.keyword}";
 		});
 		
+		const button = document.querySelector('.report_btn');
+		
+		button.addEventListener("click", function() {
+			window.open("/a_board/report", "신고", "width=400, height=600, left=0, top=0");
+		});
 	});
 	
 	/* 좋아요 */
@@ -136,6 +141,10 @@
 		
 	<div>	
 		<button type="button" class="list_btn">목록</button>
+	</div>
+	
+	<div>
+		<button type="button" class="report_btn">신고</button>
 	</div>
 	
 	<div class="like">
