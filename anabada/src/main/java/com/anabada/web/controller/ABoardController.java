@@ -1,26 +1,29 @@
 package com.anabada.web.controller;
 
-import java.time.LocalDate;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.inject.Inject;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.anabada.web.service.ABoardService;
+import com.anabada.web.service.ALikeService;
 import com.anabada.web.service.AReplyService;
 import com.anabada.web.vo.ABoardVO;
+import com.anabada.web.vo.ALikeVO;
 import com.anabada.web.vo.APageMaker;
 import com.anabada.web.vo.AReplyVO;
 import com.anabada.web.vo.ASearchCriteria;
@@ -37,6 +40,9 @@ public class ABoardController {
 
 	@Inject
 	AReplyService replyService;
+
+	@Inject
+	ALikeService likeService;
 
 	// 게시판글 작성 화면
 	// 리턴값이랑 경로랑 같다면 안적어줘도 됨
@@ -73,18 +79,36 @@ public class ABoardController {
 	}
 
 	@RequestMapping(value = "/readView", method = RequestMethod.GET)
-	public String read(Model model, ABoardVO boardVO, MemberVO memberVO, @ModelAttribute("scri") ASearchCriteria scri,
-			HttpSession session) throws Exception {
+	public String read(Model model, ABoardVO boardVO, ALikeVO likeVO, MemberVO memberVO,
+			@ModelAttribute("scri") ASearchCriteria scri, HttpServletRequest req) throws Exception {
 
 		logger.info("게시글 상세보기");
-
+		
+		HttpSession session = req.getSession();
+		String id = (String) session.getAttribute("id");
+		
+		logger.info("id : " + id);
+		
 		model.addAttribute("read", service.read(boardVO.getA_bno()));
 		model.addAttribute("scri", scri);
-
+		
 		List<AReplyVO> replyList = replyService.readReply(boardVO.getA_bno());
 		model.addAttribute("replyList", replyList);
 		
-		return "a_board/readView";
+		Map<String, String> likeChk = new HashMap<>();
+		
+		likeChk.put("id", id);
+		likeChk.put("a_bno", Integer.toString(boardVO.getA_bno()));
+		
+		logger.info("likeChk : " + likeChk);
+		
+		int Chk = likeService.likeCheck(likeChk);
+		
+		model.addAttribute("Chk", Chk);
+		
+		logger.info("Chk : " + Chk);
+
+		return "/a_board/readView";
 	}
 
 	@RequestMapping(value = "/updateView", method = RequestMethod.GET)
@@ -132,43 +156,35 @@ public class ABoardController {
 
 		return "redirect:/a_board/list";
 	}
-
-	@RequestMapping(value = "/replyWrite", method = RequestMethod.POST)
-	public String replyWrite(AReplyVO replyVO, @ModelAttribute("scri") ASearchCriteria scri, RedirectAttributes rttr)
-			throws Exception {
-
-		logger.info("댓글 작성");
-
-		replyService.writeReply(replyVO);
-
-		rttr.addAttribute("a_bno", replyVO.getA_bno());
-		rttr.addAttribute("page", scri.getPage());
-		rttr.addAttribute("perPageNum", scri.getPerPageNum());
-		rttr.addAttribute("searchType", scri.getSearchType());
-		rttr.addAttribute("keyword", scri.getKeyword());
-		rttr.addAttribute("cateType", scri.getCateType());
-
-		return "redirect:/a_board/readView";
+	
+	@RequestMapping(value = "/insertLike", method = RequestMethod.POST)
+	public @ResponseBody String insertLike(ABoardVO boardVO, ALikeVO likeVO, @RequestParam(value = "id", required = false) String id, @RequestParam(value = "a_bno", required = false) int a_bno,
+			HttpServletRequest request) throws Exception {
+		System.out.println("insertLike 잘 넘어는지 확인");
+		
+		Map<String, String> bnoId = new HashMap<>();
+		
+		bnoId.put("id", id);
+		bnoId.put("a_bno", Integer.toString(boardVO.getA_bno()));
+		
+		likeService.insertLike(bnoId);
+		
+		return "/a_board/readView";
 	}
 	
-	@PostMapping("/replyUpdate")
-	public ResponseEntity updateReply(AReplyVO replyVO) throws Exception {
-		LocalDate now = LocalDate.now();
+	@RequestMapping(value = "/deleteLike", method = RequestMethod.POST)
+	public @ResponseBody String deleteLike(ABoardVO boardVO, ALikeVO likeVO, @RequestParam(value = "id", required = false) String id, @RequestParam(value = "a_bno", required = false) int a_bno, 
+			HttpServletRequest request) throws Exception {
+		System.out.println("deleteLike 잘 넘어오는지 확인");
 		
-		replyVO.setR_regdate(java.sql.Date.valueOf(now));
-		replyService.updateReply(replyVO);
-		return new ResponseEntity(HttpStatus.OK);
+		Map<String, String> bnoId = new HashMap<>();
+		
+		bnoId.put("id", id);
+		bnoId.put("a_bno", Integer.toString(boardVO.getA_bno()));
+		
+		likeService.deleteLike(bnoId);
+		
+		return "/a_board/readView";
 	}
-
-	@RequestMapping(value = "/replyDelete", method = RequestMethod.GET)
-	public String replyDelete(int rno, int bno) throws Exception {
-	//replyDelete()안에 값은 view의 스크립트에 적힌 링크값이랑 같아야 한다.
-		logger.info("댓글 삭제");
-		AReplyVO vo = new AReplyVO();
-		vo.setA_bno(bno);
-		vo.setR_rno(rno);
-		replyService.deleteReply(vo);
-		return "redirect:/a_board/readView?a_bno="+bno;
-	}
-
+	
 }

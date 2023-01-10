@@ -39,12 +39,10 @@
 </script>
 </head>
 <body>
-<header>
-	<h1>게시판</h1>
-</header>
 
 <div>
-	<%@include file="nav.jsp" %>
+	<jsp:include page="../includes/nav.jsp"/>
+	<jsp:include page="../includes/header.jsp"/>
 </div>
 
 <form name="updateForm" method="post" action="/a_board/update">
@@ -80,5 +78,9 @@
 		<button type="reset" class="cancel_btn">취소</button>
 	</div>
 </form>
+
+<div>
+	<jsp:include page="../includes/footer.jsp" />
+</div>
 </body>
 </html>

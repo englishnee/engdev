@@ -7,17 +7,19 @@
 <head>
 <meta charset="UTF-8">
 <title>게시글 상세보기</title>
-<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js""></script>
 <script type="text/javascript">
 	$(document).ready(function() {
 		var formObj = $("form[name='readForm']");
-
+		
+		/* 게시글 수정 */
 		$(".update_btn").on("click", function() {
 				formObj.attr("action", "/a_board/updateView");
 				formObj.attr("method", "get");
 				formObj.submit();
 			})
 			
+		/* 게시글 삭제 */
 			$(".delete_btn").on("click", function() {
 				var deleteYN = confirm("삭제 하시겠습니까?");
 				if(deleteYN == true) {
@@ -27,19 +29,79 @@
 				}
 			})
 			
+		/* 게시글 목록 보기 */
 		$(".list_btn").on("click", function() {
 			location.href = "/a_board/list?page=${scri.page}" + "&perPageNum=${scri.perPageNum}" + 
 					"&searchType=${scri.searchType}" + "&keyword=${scri.keyword}";
-		})
+		});
+		
 	});
+	
+	/* 좋아요 */
+	$(document).ready(function() {
+		
+		var likeVal = ${Chk};
+		
+		if(likeVal > 0) {
+			$("#heart").attr("src", "<c:url value='/images/heart.png'/>");
+			$(".like").prop("name", likeVal);
+		}
+		else {
+			$("#clear").attr("src", "<c:url value='/images/clear.png'/>");
+			$(".like").prop("name", likeVal);
+		}  
+		
+		if(likeVal > 0) {
+			$("#heart").on("click", function() {
+			$.ajax ({
+				url: '/a_board/deleteLike',
+				type: 'POST',
+				dataType: 'text',				
+				data: ({'id': '${sessionScope.id}', 'a_bno': '${read.a_bno}' }),
+				success: function(data) {
+					/* that.prop("name", data);
+					if(data == 1) {
+						$("#clear").attr("src", "<c:url value='/images/heart.png'/>");
+					}
+					else {
+						$("#clear").attr("src", "<c:url value='/images/clear.png'/>");			
+					} */
+					alert("좋아요 취소 성공");
+					$("#heart").attr("src", "<c:url value='/images/clear.png'/>");
+				}
+			});
+		});
+		} else {
+			$("#clear").on("click", function() {
+			$.ajax ({
+				url: '/a_board/insertLike',
+				type: 'POST',
+				dataType: 'text',				
+				data: ({'id': '${sessionScope.id}', 'a_bno': '${read.a_bno}' }),
+				success: function(data) {
+					/* that.prop("name", data);
+					if(data == 1) {
+						$("#clear").attr("src", "<c:url value='/images/heart.png'/>");
+					}
+					else {
+						$("#clear").attr("src", "<c:url value='/images/clear.png'/>");			
+					} */
+					alert("좋아요 성공");
+					$("#clear").attr("src", "<c:url value='/images/heart.png'/>");
+				}
+			});
+		});
+	}
+});
+	
 </script>
+
 </head>
 <body>
-<header>
-	<h1>아나바다 커뮤니티</h1>
-</header>
+
 <div>
-	<%@include file="nav.jsp" %>
+	<jsp:include page="../includes/nav.jsp"/>
+	<jsp:include page="../includes/header.jsp"/>
 </div>
 	<!-- 게시글 -->
 <section>
@@ -76,9 +138,23 @@
 		<button type="button" class="list_btn">목록</button>
 	</div>
 	
-	<div>
-	<%@include file="replyReadView.jsp" %>
+	<div class="like">
+		<c:if test="${Chk == 0 }">
+		<img id="clear" src="<c:url value='/images/clear.png'/>" style="width:40px; height:40px;"/>
+		</c:if>
+		<c:if test="${Chk > 0 }">
+ 		<img id="heart" src="<c:url value='/images/heart.png'/>" style="width:40px; height:40px;"/> 
+ 		</c:if>
 	</div>
+	
+	
+<div>
+	<%@include file="replyReadView.jsp" %>
+</div>
+
+<div>
+	<jsp:include page="../includes/footer.jsp" />
+</div>
 </section>
 </body>
 </html>

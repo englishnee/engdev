@@ -27,12 +27,10 @@
 </style>
 </head>
 <body>
-<div>
-	<h1>글쓰기</h1>
-</div>
 
 <div>
-	<%@include file="nav.jsp" %>
+	<jsp:include page="../includes/nav.jsp"/>
+	<jsp:include page="../includes/header.jsp"/>
 </div>
 
 <form name="writeForm" method="post" action="/a_board/write">
@@ -74,5 +72,9 @@
 		</tr>
 </table>
 </form>
+
+<div>
+	<jsp:include page="../includes/footer.jsp" />
+</div>
 </body>
 </html>

@@ -68,5 +68,4 @@ WHERE A_BNO = #{a_bno}
 DELETE FROM A_BOARD WHERE A_BNO = #{a_bno} 
 </delete>  
 
-
 </mapper>

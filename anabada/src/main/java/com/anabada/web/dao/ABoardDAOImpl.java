@@ -1,6 +1,7 @@
 package com.anabada.web.dao;
 
 import java.util.List;
+import java.util.Map;
 
 import javax.inject.Inject;
 
@@ -8,11 +9,12 @@ import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Repository;
 
 import com.anabada.web.vo.ABoardVO;
+import com.anabada.web.vo.ALikeVO;
 import com.anabada.web.vo.ASearchCriteria;
 
 @Repository
 public class ABoardDAOImpl implements ABoardDAO {
-
+ 
 	@Inject
 	//*mapper.xml에 연결하려고 사용(관련 설정은 root-context.xml에서 함, sqlSession을 사용하기 위해 sqlSessionFactory 설정)
 	private SqlSession sqlSession;
@@ -58,4 +60,5 @@ public class ABoardDAOImpl implements ABoardDAO {
 	public void delete(int a_bno) throws Exception {
 		sqlSession.delete("boardMapper.delete", a_bno);
 	}
+
 }

@@ -52,24 +52,27 @@ public class MemberController {
 	}
 	
 	// 로그인 post
-	@RequestMapping(value = "/login", method = RequestMethod.POST)
+	@RequestMapping(value="/member/login", method = RequestMethod.POST)
 	public String login(MemberVO vo, HttpServletRequest req, RedirectAttributes rttr) throws Exception {
-		logger.info("로그인 post ~ ");
-		
-		HttpSession session = req.getSession();
-		MemberVO login = service.login(vo);
-		
-		if (login == null) {
-			session.setAttribute("member", null);
-			rttr.addFlashAttribute("msg", false);
-			
-		} else {
-			session.setAttribute("member", login);
-			logger.info("member: " +  login);
-		}
-		
-		return "redirect:/";
-	}
+	    logger.info("로그인 post ~ ");
+	      
+	    HttpSession session = req.getSession();
+	    MemberVO login = service.login(vo);
+	      
+	    if (login == null) {
+	       session.setAttribute("member", null);
+	       session.setAttribute("id", null);
+	         
+	       rttr.addFlashAttribute("msg", false);
+	         
+	    } else {
+	       session.setAttribute("member", login);
+	       session.setAttribute("id", login.getId());
+	       
+	       logger.info("member: " +  login);
+	    }
+	      return "redirect:/";
+   }
 	
 	// 회원 정보 수정 get
 	@RequestMapping(value="/memberUpdateView", method = RequestMethod.GET)

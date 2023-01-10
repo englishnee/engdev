@@ -29,38 +29,36 @@
 </style>
 <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <script>
-$(function () {
-   $('#searchBtn').click(function () {
-      var chbtn = $("input[type='radio']:checked").val();
-      self.location = "list" + '${pageMaker.makeQuery(1)}' + '&searchType=' + $("select option:selected").val() + 
+	$(function () {
+   		$('#searchBtn').click(function () {
+      		var chbtn = $("input[type='radio']:checked").val();
+      			self.location = "list" + '${pageMaker.makeQuery(1)}' + '&searchType=' + $("select option:selected").val() + 
                "&keyword=" + encodeURIComponent($('#keywordInput').val()) + "&cateType=" + encodeURIComponent(chbtn);
-   });
-});
+  		 });
+	});
 
-$(function() {
-   $("input[type='radio']").click(function() {
-         var rabtn = $("input[type='radio']:checked").val();
-      self.location = "list" + '${pageMaker.makeQuery(1)}' + '&searchType=' + $("check option:checked").val()
-         + "&keyword=" + encodeURIComponent($('#keywordInput').val()) + "&cateType=" + encodeURIComponent(rabtn);   
-   });
-}); 
+	$(function() {
+   		$("input[type='radio']").click(function() {
+        	var rabtn = $("input[type='radio']:checked").val();
+      			self.location = "list" + '${pageMaker.makeQuery(1)}' + '&searchType=' + $("check option:checked").val()
+         		+ "&keyword=" + encodeURIComponent($('#keywordInput').val()) + "&cateType=" + encodeURIComponent(rabtn);   
+   		});
+	}); 
 
-$(function() {
-   $("input[name='all']").click(function() {
-      self.location = "/a_board/list";
-   })
-})
+	$(function() {
+   		$("input[name='all']").click(function() {
+      		self.location = "/a_board/list";
+   		});
+	});
+
 
 </script>
 </head>
 <body>
-<header>
-   <h1>아나바다 커뮤니티</h1>
-</header>
-<hr>
-   
+
 <div>
-   <%@include file="nav.jsp" %>
+	<jsp:include page="../includes/nav.jsp"/>
+	<jsp:include page="../includes/header.jsp"/>
 </div>
 
 <form>
@@ -112,6 +110,10 @@ $(function() {
    </table>
    
    <div>
+   		<a href="/a_board/writeView">글 작성</a>
+   </div>
+    
+   <div>
       <select name="searchType">
          <option value="t" <c:out value="${scri.searchType eq 't' ? 'selected' : '' }"/>>제목</option>
          <option value="c" <c:out value="${scri.searchType eq 'c' ? 'selected' : '' }"/>>내용</option>
@@ -143,5 +145,9 @@ $(function() {
       </ul>
    </div>
 </form>   
+
+<div>
+	<jsp:include page="../includes/footer.jsp" />
+</div>
 </body>
 </html>

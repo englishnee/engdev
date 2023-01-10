@@ -1,6 +1,8 @@
 package com.anabada.web.service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.inject.Inject;
 
@@ -8,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import com.anabada.web.dao.ABoardDAO;
 import com.anabada.web.vo.ABoardVO;
+import com.anabada.web.vo.ALikeVO;
 import com.anabada.web.vo.ASearchCriteria;
 
 @Service
@@ -46,5 +49,4 @@ public class ABoardServiceImpl implements ABoardService {
 	public void delete(int a_bno) throws Exception {
 		dao.delete(a_bno);
 	}
-
 }

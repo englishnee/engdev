@@ -65,4 +65,5 @@ public class MemberVO {
 		return "MemberVO [id=" + id + ", pass=" + pass + ", name=" + name + ", nick=" + nick + ", tel=" + tel
 				+ ", email=" + email + ", loca=" + loca + ", lev=" + lev + "]";
 	}
+	
 }
