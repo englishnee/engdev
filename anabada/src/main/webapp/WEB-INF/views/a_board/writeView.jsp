@@ -24,7 +24,19 @@
 		color:white;
 		border-radius:10px;
 	}
+	.container {
+		width: 100%;
+  		min-width: 1000px;
+  		max-width: 1000px;
+  		margin: 0 auto 0 auto;
+	}
+	.mcont {
+ 		margin: 0 auto;
+  		padding: 15px 20px 50px 20px;
+ 		box-sizing: border-box;
+}
 </style>
+<script src="//cdn.ckeditor.com/4.19.0/standard/ckeditor.js"></script>
 </head>
 <body>
 
@@ -33,7 +45,8 @@
 	<jsp:include page="../includes/header.jsp"/>
 </div>
 
-<form name="writeForm" method="post" action="/a_board/write">
+<section class="container">
+<form name="writeForm" method="post" action="/a_board/write" class="mcont">
 <table>
 		<tr>
 			<td>
@@ -54,6 +67,12 @@
 			<td>
 				<label for="content">내용</label><br>
 				<textarea id="content" name="a_content" rows="15" cols="50" placeholder="내용을 입력하세요."></textarea>
+				<script type="text/javascript">
+					CKEDITOR.replace('content', {filebrowserUploadUrl: '/a_board/fileUpload', 
+						enterMode: CKEDITOR.ENTER_BR,
+						shiftEnterMode: CKEDITOR.ENTER_P,
+						width:950, height:300});
+				</script>
 			</td>
 		</tr>
 		
@@ -67,11 +86,12 @@
 		<tr>
 			<td>
 				<button type="submit">등록</button>
-				<button type="reset">취소</button>
+				<button type="reset" onclick="javascript:history.go(-1)">취소</button>
 			</td>
 		</tr>
 </table>
 </form>
+</section>
 
 <div>
 	<jsp:include page="../includes/footer.jsp" />
