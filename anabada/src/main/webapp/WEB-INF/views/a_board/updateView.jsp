@@ -7,6 +7,7 @@
 <head>
 <meta charset="UTF-8">
 <title>게시글 수정하기</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
 <style>
 .container {
 	width: 100%;
@@ -71,15 +72,17 @@
 	<table>
 		<tr>
 			<td>
-				제목 <input type="text" id="a_title" name="a_title" class="chk" value="${update.a_title }" placeholder="제목을 입력해주세요."/>
+				<label for="a_title" class="form-label">제목</label>
+				<input type="text" id="a_title" name="a_title" class="chk form-control" value="${update.a_title }" placeholder="제목을 입력해주세요."/>
 			</td>
 		</tr>
 		
 		<tr>
 			<td>
-				내용 <textarea id="a_content" name="a_content" class="chk" placeholder="내용을 입력해주세요."><c:out value="${update.a_content }"/></textarea>
+				<label for="a_content" class="form-label">내용</label>
+				<textarea id="a_content" name="a_content" placeholder="내용을 입력해주세요."><c:out value="${update.a_content }"/></textarea>
 			<script type="text/javascript">
-				CKEDITOR.replace('a_content', {filebrowserUploadUrl: '/a_board/fileUpload', width:950, height:300});
+				CKEDITOR.replace('a_content', {filebrowserUploadUrl: '/a_board/fileUpload', width:930, height:300});
 			</script>
 			</td>
 			
@@ -87,13 +90,15 @@
 		
 		<tr>
 			<td>
-				작성자 <input type="text" id="id" name="id" value="${update.id }" readonly="readonly"/>
+				<label for="id" class="form-label">작성자</label>
+				<input type="text" id="id" name="id" class="form-control" value="${update.id }" readonly/>
 			</td>
 		</tr>
 	</table>
 	
-	<div>
-		<button type="submit" class="update_btn">저장</button>
+	<div style="text-align:right;">
+		<br>
+		<button type="submit" class="update_btn">저장</button>&nbsp;
 		<!-- .cancel_btn이 안먹어서 history.go(-2)로 변경, 게시글 목록으로 넘어가게 함 -->
 		<button type="reset" onclick="javascript:history.go(-2)">취소</button>
 	</div>

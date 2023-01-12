@@ -6,6 +6,7 @@
 <head>
 <meta charset="UTF-8">
 <title>board write</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
 <style>
 	.chk input[type='radio'] {
 		display:none;
@@ -58,10 +59,12 @@
 		
 		<tr>
 			<td>
-				<label for="title">제목</label><br>
-				<input type="text" id="title" name="a_title" placeholder="제목을 입력하세요."/>
+				<label for="title" class="form-label">제목</label><br>
+				<input type="text" id="title" name="a_title" class="form-control" placeholder="제목을 입력하세요."/>
 			</td>
 		</tr>
+		
+		<br>
 		
 		<tr>
 			<td>
@@ -71,25 +74,24 @@
 					CKEDITOR.replace('content', {filebrowserUploadUrl: '/a_board/fileUpload', 
 						enterMode: CKEDITOR.ENTER_BR,
 						shiftEnterMode: CKEDITOR.ENTER_P,
-						width:950, height:300});
+						width:930, height:300});
 				</script>
 			</td>
 		</tr>
 		
 		<tr>
 			<td>
-				<label for="id">작성자</label><br>
-				<input type="text" id="id" name="id" value="${member.id}" readonly/>
-			</td>
-		</tr>
-		
-		<tr>
-			<td>
-				<button type="submit">등록</button>
-				<button type="reset" onclick="javascript:history.go(-1)">취소</button>
+				<label for="id" class="form-label">작성자</label><br>
+				<input type="text" id="id" name="id" class="form-control" value="${member.id}" readonly/>
 			</td>
 		</tr>
 </table>
+		
+		<div style="text-align:right;">
+				<br>
+				<button type="submit">등록</button>
+				<button type="reset" onclick="javascript:history.go(-1)">취소</button>
+		</div>
 </form>
 </section>
 

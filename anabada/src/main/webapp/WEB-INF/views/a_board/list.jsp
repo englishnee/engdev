@@ -137,17 +137,28 @@
    		<a href="/a_board/writeView">글 작성</a>
    </div>
     
-   <div>
-      <select name="searchType">
-         <option value="t" <c:out value="${scri.searchType eq 't' ? 'selected' : '' }"/>>제목</option>
-         <option value="c" <c:out value="${scri.searchType eq 'c' ? 'selected' : '' }"/>>내용</option>
-         <option value="tc" <c:out value="${scri.searchType eq 'tc' ? 'selected' : '' }"/>>제목+내용</option>
-         <option value="w" <c:out value="${scri.searchType eq 'w' ? 'selected' : '' }"/>>작성자</option>
-      </select>
+    <br>
+    
+  	<div class="row justify-content-center">
+  		<div class="col-md-2">
+      		<select name="searchType" class="form-select form-select-sm">
+        		<option value="t" <c:out value="${scri.searchType eq 't' ? 'selected' : '' }"/>>제목</option>
+         		<option value="c" <c:out value="${scri.searchType eq 'c' ? 'selected' : '' }"/>>내용</option>
+         		<option value="tc" <c:out value="${scri.searchType eq 'tc' ? 'selected' : '' }"/>>제목+내용</option>
+         		<option value="w" <c:out value="${scri.searchType eq 'w' ? 'selected' : '' }"/>>작성자</option>
+      		</select>
+    	</div>
    
-      <input type="text" name="keyword" id="keywordInput" value="${scri.keyword }"/>
-      <button type="button" id="searchBtn">검색</button>
-   </div>
+   		<div class="col-md-4">
+      		<input type="text" name="keyword" id="keywordInput" class="form-control form-control-sm" value="${scri.keyword }"/>
+   		</div>
+   
+   		<div class="col-md-1">
+      		<button type="button" id="searchBtn" style="width:50px;">검색</button>
+  		</div>
+ 	</div>
+   
+   <br>
    
    <div style="text-align:center;">
          <c:if test="${pageMaker.prev }">
