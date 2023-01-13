@@ -64,7 +64,8 @@ public class ABoardController {
 
 		logger.info("writeView");
 	}
-
+	
+	//게시글 작성
 	@RequestMapping(value = "/write", method = RequestMethod.POST)
 	public String writeView(ABoardVO boardVO) throws Exception {
 
@@ -76,6 +77,7 @@ public class ABoardController {
 		// redirect는 컨트롤러 주소를 찾아감
 	}
 	
+	//ckeditor 파일 업로드 
 	 @RequestMapping(value="/fileUpload", method = RequestMethod.POST)
 	    public void imageUpload(HttpServletRequest request, HttpServletResponse response, MultipartHttpServletRequest multiFile
 	    		, @RequestParam MultipartFile upload) throws Exception{
@@ -130,7 +132,7 @@ public class ABoardController {
 	    	return;
 	    }
 	 
-	// 서버로 전송된 이미지 뿌려주기
+	//서버로 전송된 이미지 뿌려주기
 	    @RequestMapping(value = "/ckImgSubmit")
 	    public void ckSubmit(@RequestParam(value="uid") String uid, @RequestParam(value="fileName") String fileName
 	    		, HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
@@ -176,6 +178,8 @@ public class ABoardController {
 	    			}
 	    		}
 	    }
+	    
+	//게시판 목록
 	@RequestMapping(value = "/list", method = RequestMethod.GET)
 	public String list(Model model, @ModelAttribute("scri") ASearchCriteria scri) throws Exception {
 
@@ -191,6 +195,7 @@ public class ABoardController {
 		return "/a_board/list";
 	}
 
+	//게시글 상세보기
 	@RequestMapping(value = "/readView", method = RequestMethod.GET)
 	public String read(Model model, ABoardVO boardVO, ALikeVO likeVO, MemberVO memberVO,
 			@ModelAttribute("scri") ASearchCriteria scri, HttpServletRequest req) throws Exception {
@@ -217,13 +222,15 @@ public class ABoardController {
 		
 		int Chk = likeService.likeCheck(likeChk);
 		
+		//좋아요 여부 체크 좋아요 했으면 1, 좋아요 없으면 0
 		model.addAttribute("Chk", Chk);
 		
 		logger.info("Chk : " + Chk);
-
+		
 		return "/a_board/readView";
 	}
-
+	
+	//게시글 수정 화면
 	@RequestMapping(value = "/updateView", method = RequestMethod.GET)
 	public String updateView(Model model, ABoardVO boardVO, MemberVO memberVO,
 			@ModelAttribute("scri") ASearchCriteria scri) throws Exception {
@@ -235,7 +242,8 @@ public class ABoardController {
 
 		return "a_board/updateView";
 	}
-
+	
+	//게시글 수정
 	@RequestMapping(value = "/update", method = RequestMethod.POST)
 	public String update(ABoardVO boardVO, @ModelAttribute("scri") ASearchCriteria scri, RedirectAttributes rttr)
 			throws Exception {
@@ -253,6 +261,7 @@ public class ABoardController {
 		return "redirect:/a_board/list";
 	}
 
+	//게시글 삭제
 	@RequestMapping(value = "/delete", method = RequestMethod.GET)
 	public String delete(ABoardVO boardVO, @ModelAttribute("scri") ASearchCriteria scri, RedirectAttributes rttr)
 			throws Exception {
@@ -270,9 +279,10 @@ public class ABoardController {
 		return "redirect:/a_board/list";
 	}
 	
+	//좋아요 추가
 	@RequestMapping(value = "/insertLike", method = RequestMethod.POST)
 	public @ResponseBody String insertLike(ABoardVO boardVO, ALikeVO likeVO, @RequestParam(value = "id", required = false) String id, @RequestParam(value = "a_bno", required = false) int a_bno,
-			HttpServletRequest request) throws Exception {
+			HttpServletRequest request, Model model) throws Exception {
 		System.out.println("잘 넘어는지 확인");
 		
 		Map<String, String> bnoId = new HashMap<>();
@@ -282,9 +292,13 @@ public class ABoardController {
 		
 		likeService.insertLike(bnoId);
 		
+		int likeCnt = likeService.updateLike(likeVO.getA_bno());
+		model.addAttribute("like", likeCnt);
+		
 		return "redirect:/a_board/readView";
 	}
 	
+	//좋아요 삭제
 	@RequestMapping(value = "/deleteLike", method = RequestMethod.POST)
 	public @ResponseBody String deleteLike(ABoardVO boardVO, ALikeVO likeVO, @RequestParam(value = "id", required = false) String id, @RequestParam(value = "a_bno", required = false) int a_bno, 
 			HttpServletRequest request) throws Exception {
@@ -295,15 +309,18 @@ public class ABoardController {
 		bnoId.put("a_bno", Integer.toString(boardVO.getA_bno()));
 		
 		likeService.deleteLike(bnoId);
+		likeService.deleteIsLike(likeVO.getA_bno());
 		
 		return "redirect:/a_board/readView";
 	}
 	
+	//신고 팝업 띄우기
 	@RequestMapping(value = "/report", method = RequestMethod.GET)
 	public String report() {
 		return "a_board/report";
 	}
 
+	//신고 사유 선택 유효성 검사 팝업 띄우기
 	@RequestMapping(value = "/reportError", method = RequestMethod.GET)
 	public String reportError() {
 		return "a_board/reportError";

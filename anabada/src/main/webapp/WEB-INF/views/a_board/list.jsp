@@ -40,6 +40,8 @@
 </style>
 <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <script>
+	
+	/* 검색 버튼, 라디오 버튼, 카테고리 버튼 스크립트 */
 	$(function () {
    		$('#searchBtn').click(function () {
       		var chbtn = $("input[type='radio']:checked").val();
@@ -61,7 +63,21 @@
       		self.location = "/a_board/list";
    		});
 	});
-
+	/* 버튼 스크립트 끝 */
+	
+	
+	/* 글 작성 로그인 유효성 검사 */
+	function write_login() {
+		var id = "${id}";
+			
+		if(id == "") {
+			alert("로그인 후 작성하실 수 있습니다.");
+		}
+		else {
+			location.href = "/a_board/writeView";
+		}
+	}
+	/* 글 작성 로그인 유효성 검사 끝 */
 </script>
 </head>
 <body>
@@ -75,6 +91,65 @@
 <section class="container">
 <form class="mcont">
    <table class="table">
+   
+   <!-- 지역 카테고리 -->
+   	  <div>
+   	  	<label class="chk">
+   	  		<input type="radio" id="all_loca" name="all_loca"/><span>전국</span>
+   	  	</label>
+   	  	
+   	  	<label class="chk">
+   	  		<input type="radio" id="gyeonggi" name="a_loca" value="1"/><span>강원</span>
+   	  	</label>
+   	  	
+   	  	<label class="chk">
+   	  		<input type="radio" id="gyeongnam" name="a_loca" value="2"/><span>경기</span>
+   	  	</label>
+   	  	
+   	  	<label class="chk">
+   	  		<input type="radio" id="gyeongbuk" name="a_loca" value="3"/><span>경남</span>
+   	  	</label>
+   	  	
+   	  	<label class="chk">
+   	  		<input type="radio" id="busan" name="a_loca" value="4"/><span>경북</span>
+   	  	</label>
+   	  	
+   	  	<label class="chk">
+   	  		<input type="radio" id="seoul" name="a_loca" value="5"/><span>부산</span>
+   	  	</label>
+   	  	
+   	  	<label class="chk">
+   	  		<input type="radio" id="incheon" name="a_loca" value="6"/><span>서울</span>
+   	  	</label>
+   	  	
+   	  	<label class="chk">
+   	  		<input type="radio" id="jeonnam" name="a_loca" value="7"/><span>인천</span>
+   	  	</label>
+   	  	
+   	  	<label class="chk">
+   	  		<input type="radio" id="jeonbuk" name="a_loca" value="8"/><span>전남</span>
+   	  	</label>
+   	  	
+   	  	<label class="chk">
+   	  		<input type="radio" id="kangwon" name="a_loca" value="9"/><span>전북</span>
+   	  	</label>
+   	  	
+   	  	<label class="chk">
+   	  		<input type="radio" id="jeju" name="a_loca" value="10"/><span>제주</span>
+   	  	</label>
+   	  	
+   	  	<label class="chk">
+   	  		<input type="radio" id="chungnam" name="a_loca" value="11"/><span>충남</span>
+   	  	</label>
+   	  	
+   	  	<label class="chk">
+   	  		<input type="radio" id="chungbuk" name="a_loca" value="12"/><span>충북</span>
+   	  	</label>
+   	  </div>
+      <!-- 지역 카테고리 끝 -->
+      
+      
+      <!-- 말머리 카테고리 -->
       <div>
          <label class="chk">
             <input type="radio" id="all" name="all"/><span>전체</span>
@@ -90,9 +165,11 @@
             <input type="radio" id="with" name="a_type" value="3"<c:out value="${scri.cateType eq '3' ? 'checked' : ''}"/>/><span>같이해요</span>
          </label>
       </div>
+      <!-- 말머리 카테고리 끝 -->
+      <br>
       
-      <br/>
       
+      <!-- 게시글 목록 컬럼명 -->
       <thead>
          <tr>
          <th scope="col">말머리</th>
@@ -102,7 +179,8 @@
          <th scope="col">조회수</th>
          </tr>
       </thead>
-      
+
+	  <!-- 게시글 목록 -->
       <tbody>
       <c:forEach items="${list }" var="list">
          <tr>
@@ -131,14 +209,17 @@
          </tr>
       </c:forEach>
       </tbody>
+      <!-- 게시글 목록 끝 -->
    </table>
    
-   <div style="text-align:right;">
-   		<a href="/a_board/writeView">글 작성</a>
+   <!-- 글 작성 -->
+   <div style="text-align:right;" class="writelink">
+   		<a href="#" onclick="write_login()">글 작성</a>
    </div>
-    
+
     <br>
     
+    <!-- 검색 분류 및 검색 버튼 -->
   	<div class="row justify-content-center">
   		<div class="col-md-2">
       		<select name="searchType" class="form-select form-select-sm">
@@ -157,9 +238,11 @@
       		<button type="button" id="searchBtn" style="width:50px;">검색</button>
   		</div>
  	</div>
-   
+   	<!-- 검색 분류 및 검색 버튼 끝-->
+   	
    <br>
    
+   <!-- 페이징 처리 -->
    <div style="text-align:center;">
          <c:if test="${pageMaker.prev }">
             <a href="list${pageMaker.makeSearch(pageMaker.startPage - 1 )}">이전</a>
@@ -174,6 +257,7 @@
             <a href="list${pageMaker.makeSearch(pageMaker.endPage + 1)}">다음</a>
          </c:if>
    </div>
+   <!-- 페이징 처리 끝 -->
    
 </form> 
 </section>

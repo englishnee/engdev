@@ -55,23 +55,30 @@
 	var button = document.querySelector('.report_btn');
 		
 		button.addEventListener("click", function() {
+			var id = "${id}";
+			
+			if(id == "") {
+				alert("로그인 후 신고하실 수 있습니다.");
+			}
+			else {
 			window.open("/a_board/report", "신고", "width=400, height=600, left=0, top=0");
+			}
 		});
 	});
+	/* 신고 스크립트 끝 */
+	
 	
 	/* 좋아요 스크립트 */
 	$(document).ready(function() {
 		
-		var likeVal = ${Chk};
-		
-		if(likeVal > 0) {
+		/* if(likeVal > 0) {
 			$("#heart").attr("src", "<c:url value='/images/heart.png'/>");
-			$(".like").prop("name", likeVal);
 		}
 		else {
 			$("#clear").attr("src", "<c:url value='/images/clear.png'/>");
-			$(".like").prop("name", likeVal);
-		}  
+		}   */
+
+		var likeVal = ${Chk};
 		
 		if(likeVal > 0) {
 			$("#heart").on("click", function() {
@@ -81,15 +88,9 @@
 				dataType: 'text',				
 				data: ({'id': '${sessionScope.id}', 'a_bno': '${read.a_bno}' }),
 				success: function(data) {
-					/* that.prop("name", data);
-					if(data == 1) {
-						$("#clear").attr("src", "<c:url value='/images/heart.png'/>");
-					}
-					else {
-						$("#clear").attr("src", "<c:url value='/images/clear.png'/>");			
-					} */
-					alert("좋아요 취소 성공");
+					//alert("좋아요 취소 성공");
 					$("#heart").attr("src", "<c:url value='/images/clear.png'/>");
+					location.reload();
 				}
 			});
 		});
@@ -101,20 +102,29 @@
 				dataType: 'text',				
 				data: ({'id': '${sessionScope.id}', 'a_bno': '${read.a_bno}' }),
 				success: function(data) {
-					/* that.prop("name", data);
-					if(data == 1) {
-						$("#clear").attr("src", "<c:url value='/images/heart.png'/>");
-					}
-					else {
-						$("#clear").attr("src", "<c:url value='/images/clear.png'/>");			
-					} */
-					alert("좋아요 성공");
+					//alert("좋아요 성공");
 					$("#clear").attr("src", "<c:url value='/images/heart.png'/>");
+					location.reload();
 				}
 			});
 		});
 	}
 });
+	/* 좋아요 스크립트 끝 */
+	
+	
+	/* 좋아요 로그인 유효성 검사 */
+	$(function() {
+		$(".like").on("click", function() {
+			var id = "${id}";
+			
+			if(id == "") {
+				alert("로그인 후 이용 가능합니다.");
+			}
+		});
+	});
+	/* 좋아요 로그인 유효성 검사 끝 */
+	
 	
 	/* 댓글 작성, 수정, 삭제 스크립트 */
 	$(function() {
@@ -180,7 +190,7 @@
 		 alert("댓글이 삭제되었습니다.");
 		$(location).attr("href", "replyDelete?rno="+rno+"&bno="+bno);
 	});
-	
+	/* 댓글 관련 스크립트 끝 */
 });
 </script>
 
@@ -225,12 +235,13 @@
 				CKEDITOR.replace('a_content', {filebrowserUploadUrl: '/a_board/fileUpload', width:930, height:300});
 			</script>
 		</div>
-	
+	<!-- 게시글 끝 -->
 	<br>
 	
 		<!-- 좋아요 -->
+		<div class="like">
 		<c:choose>
-			<c:when test="${Chk == 0}"> 
+			<c:when test="${read.a_like_cnt == 0}"> 
 				<img id="clear" src="<c:url value='/images/clear.png'/>" style="width:50px; height:50px;"/>
 	 		</c:when>
 			<c:otherwise>  
@@ -238,13 +249,19 @@
 	 		</c:otherwise>
 		</c:choose> 
 		
+		<!-- 좋아요 개수 표시 -->
+		<span><c:out value="${read.a_like_cnt}"/></span>
+		</div>
+		
+		
+		<!-- 게시글 수정, 삭제, 목록, 신고 -->
 		<div style="text-align:right;">
-			<c:if test="${read.id eq member.id }">
+			<c:if test="${read.id eq id }">
 				<button type="button" class="update_btn">수정</button> &nbsp;
 				<button type="button" class="delete_btn">삭제</button> &nbsp;
 			</c:if>
 			<button type="button" class="list_btn">목록</button> &nbsp;
-			<button type="button" class="report_btn">신고</button>
+			<button type="button" class="report_btn" onclick="rep_login()">신고</button>
 		</div>
 	
 	<%-- <span id='likeCount'>${read.a_like_cnt }</span> --%>
@@ -252,7 +269,9 @@
 	<%-- <div>
 		<%@include file="replyReadView.jsp" %>
 	</div> --%>
-
+	
+	<!-- 좋아요 끝 -->
+	
 	<hr>
 
 	<!-- 댓글 -->
@@ -274,7 +293,7 @@
 				 		<button type="button" data-rno="${replyList.r_rno }" data-bno="${replyList.a_bno }" class="replysave" style="display:none">저장</button>
 				 		<button type="button" data-rno="${replyList.r_rno }" data-bno="${replyList.a_bno }" class="replyreset"style="display:none">취소</button>
 				 		
-				 		<c:if test="${replyList.id eq member.id }">
+				 		<c:if test="${replyList.id eq id }">
 				 			<button type="button" data-rno="${replyList.r_rno }" data-bno="${replyList.a_bno }" class="replyupdate">수정</button>
 				 			<button type="button" data-rno="${replyList.r_rno }" data-bno="${replyList.a_bno }" class="replydelete">삭제</button>
 				 		</c:if>
@@ -294,19 +313,19 @@
 		
 		<div>
 			<label for="id">작성자</label>
-			<input type="text" id="id" name="id" value="${member.id }" readonly/>
+			<input type="text" id="id" name="id" value="${id }" readonly/>
 			<label for="r_content">내용</label>
 			<input type="text" id="r_content" name="r_content"/>
 		
-			<c:if test="${member.id != null }">
+			<c:if test="${id != null }">
 				<button type="button" class="write_btn">작성</button>
 			</c:if>
-			<c:if test="${member.id == null }">
+			<c:if test="${id == null }">
 				<span>로그인 후 댓글을 작성하실 수 있습니다.</span>
 			</c:if>
 		</div>
 	</form>
-
+	<!-- 댓글 끝 -->
 </div>
 </section>
 

@@ -24,6 +24,8 @@
 <script src="//cdn.ckeditor.com/4.19.0/standard/ckeditor.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <script>
+
+	/* 수정 버튼 스크립트 */
 	$(function() {
 		var formObj = $("form[name='updateForm']")d;
 		
@@ -60,6 +62,7 @@
 	<jsp:include page="../includes/header.jsp"/>
 </div>
 
+<!-- 게시글 수정 -->
 <section class="container">
 <form name="updateForm" method="post" action="/a_board/update" class="mcont">
 	<input type="hidden" name="a_bno" value="${update.a_bno }" readonly="readonly"/>
@@ -95,7 +98,10 @@
 			</td>
 		</tr>
 	</table>
+	<!-- 게시글 수정 끝 -->
 	
+	
+	<!-- 저장 및 취소 버튼 -->
 	<div style="text-align:right;">
 		<br>
 		<button type="submit" class="update_btn">저장</button>&nbsp;

@@ -46,6 +46,7 @@
 	<jsp:include page="../includes/header.jsp"/>
 </div>
 
+<!-- 게시글 작성 -->
 <section class="container">
 <form name="writeForm" method="post" action="/a_board/write" class="mcont">
 <table>
@@ -82,11 +83,14 @@
 		<tr>
 			<td>
 				<label for="id" class="form-label">작성자</label><br>
-				<input type="text" id="id" name="id" class="form-control" value="${member.id}" readonly/>
+				<input type="text" id="id" name="id" class="form-control" value="${id}" readonly/>
 			</td>
 		</tr>
 </table>
+	<!-- 게시글 작성 끝 -->
 		
+		
+	<!-- 등록 및 취소 버튼 -->
 		<div style="text-align:right;">
 				<br>
 				<button type="submit">등록</button>
